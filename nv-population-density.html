@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="nv-pop-density-stylesheet.css">
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="https://d3js.org/topojson.v1.min.js"></script>
+        <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    </head>
+</html>
+<body>
+    <h1 style="text-align:center; color:black"><bold>Nevada Population Density, 2022</bold></h1>
+    <svg width="960" height="650"></svg>
+    <script type="text/javascript" src="nv-pop-density.js"></script>
+    <button onclick="changeColorScheme()">Color</button>
+    <button onclick="toggleOutlines()">Toggle County Boundary</button>
+    <!-- Submission Info -->
+    <h4>Created by Nathan Prieto </h4>
+    <h4>Suresh Lodha</h4>
+    <h4>CSE 163: Data Programming for Visualization</h4>
+    <h4>Fall 2022</h4>
+    
+    <h4>Description: Nevada Population Density in each county for the year 2022</h4>
+   
+    <!-- Create a list using <ul> and <li> tag -->   
+    <h4>Files Submitted:</h4>
+    
+    <ul>
+        <li>Assignment7.zip</li>
+            <ul>
+                <li>Force-Directedindex.html</li>
+                <li>Force-Directed.js</li>
+                <li>Force-DirectedStylesheet.css</li>
+                <li>miserables.json</li>
+            </ul>
+    </ul>
+    <h4>Sources: </h4>
+      <ul>
+          <li>D3 API Reference</li>
+          <li>Professor Lodha's handouts</li>
+          <li><a href=https://bl.ocks.org/mbostock/4062045#miserables.json target = "_blank">Mike Bostock's Force-Directed Graph example</a></li>
+          <li><a href=https://www.d3indepth.com/force-layout/ target = "_blank">In Depth D3 Force Layout</a></li>
+          <li><a href=https://d3-graph-gallery.com/graph/interactivity_button.html target = "_blank">Adding and using buttons in D3</a></li>
+      </ul>
+</body>

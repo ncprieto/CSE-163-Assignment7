@@ -1,0 +1,19 @@
+.states {
+    fill: none;
+    stroke: #fff;
+    stroke-linejoin: round;
+}
+
+/*Add Tooltip Type here*/
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    white-space: break-spaces;    
+    width: 190px;
+    height: 55px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 10px;
+    border-radius: 8px;
+    pointer-events: none;
+}
