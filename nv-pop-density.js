@@ -11,7 +11,8 @@ var rateById = d3.map();
 var idToCounty = d3.map();
 var idToState = d3.map();
 
-// something about scaleThreshold
+// d3.scaleThreshold() maps continuous inputs to discrete regions
+// u < 50, 50 <= u < 100, 100 <= u 200, where u is the input
 // d3.schemeOrRd() allows us to use certain color schemes given the amount
 // of colors that we want, in this case we want 9 colors from the OrRd scheme
 let curColor = "red";
@@ -63,13 +64,19 @@ var projection = d3.geoAlbersUsa()
     .scale(1280)
     .translate([width / 2, height / 2.25]);
 
+// d3.geoPath() translates geoJson files into svg paths
+// .projection() defines the type of projection ie project
+// spherical distorted image of the us onto a flat surface
 var path = d3.geoPath()
     .projection(projection);
 
 var tooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
-    
+
+// d3.queue() runs asynchronous tasks independently and when finished
+// executes the function within the .await() callback
+// is this case we load the us json file and the population density csv file
 d3.queue()
     .defer(d3.json, "us-10m.json")
     .defer(d3.csv, "Population-Density-By-County.csv", function(d) {rateById.set(d.id, +d.density), idToCounty.set(d.id, d.county_name), idToState.set(d.id, d.state_name);})
@@ -148,6 +155,3 @@ function toggleOutlines(){
     }
     svg.selectAll("path").attr("stroke", newStroke);
 }
-
-// references
-// https://bl.ocks.org/Fil/0bf58d23011ab244c657a1262bcbe4b2 (for color scheme)
