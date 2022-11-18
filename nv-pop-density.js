@@ -28,7 +28,7 @@ var x = d3.scaleSqrt()
 // legend formatting and position
 var g = svg.append("g")
     .attr("class", "key")
-    .attr("transform", "translate(0,620)");
+    .attr("transform", "translate(-50,600)");
 
 g.selectAll("rect")
   .data(color.range().map(function(d) {
@@ -61,8 +61,8 @@ g.call(d3.axisBottom(x)
 // projection used for projecting spherical maps onto flat images
 // ie earth to flat computer screen
 var projection = d3.geoAlbersUsa()
-    .scale(1280)
-    .translate([width / 2, height / 2.25]);
+    .scale(4000)
+    .translate([width * 1.4, height / 1.5]);
 
 // d3.geoPath() translates geoJson files into svg paths
 // .projection() defines the type of projection ie project
@@ -82,10 +82,10 @@ d3.queue()
     .defer(d3.csv, "Population-Density-By-County.csv", function(d) {rateById.set(d.id, +d.density), idToCounty.set(d.id, d.county_name), idToState.set(d.id, d.state_name);})
     .await(ready);
 
+let stateFilter;
 function ready(error, us) {
   if (error) throw error;
     
-    // draw counties
   svg.append("g")
       .attr("class", "counties")
     .selectAll("path")
@@ -95,9 +95,9 @@ function ready(error, us) {
         // belongs to nevada based on the first two digits of its id
         // if so then we get the correct color based on the data
         // if not the we set the color fo the county to grey
-      .attr("fill", function(d) {return (d.id.toString()[0] == "3" && d.id.toString()[1] == "2") ? color(rateById.get(d.id)) : "#D3D3D3"; })
+      .attr("fill", function(d) {return verifyNevada(d) ? color(rateById.get(d.id)) : "none"})
         // stroke of the county is also determined by the same function
-      .attr("stroke", function(d) {return (d.id.toString()[0] == "3" && d.id.toString()[1] == "2") ? color(rateById.get(d.id)) : "#D3D3D3"; })
+      .attr("stroke", function(d) {return verifyNevada(d) ? color(rateById.get(d.id)) : "none"})
       .attr("d", path)
       .on("mouseover", function(d) {  
         tooltip.style("opacity", 1)
@@ -130,12 +130,12 @@ function changeColorScheme(){
     }
     // update color of counties
     svg.selectAll("path")
-        .attr("fill", function(d) {return (d.id != undefined && d.id.toString()[0] == "3" && d.id.toString()[1] == "2") ? color(rateById.get(d.id)) : "#D3D3D3"; });
-    // if county outlines are not turned off then update stroke 
+        .attr("fill", function(d) {return verifyNevada(d) ? color(rateById.get(d.id)) : "none"; });
+    // if county outlines are not on then update stroke 
     // color of counties to be correct based on new color scheme
-    if(svg.selectAll("path").attr("stroke") != "none"){
+    if(!toggled){
         svg.selectAll("path")
-            .attr("stroke", function(d) {return (d.id != undefined && d.id.toString()[0] == "3" && d.id.toString()[1] == "2") ? color(rateById.get(d.id)) : "#D3D3D3"; });
+            .attr("stroke", function(d) {return verifyNevada(d) ? color(rateById.get(d.id)) : "none"; });
     }
     // change legend colors
     g.selectAll("rect")
@@ -145,13 +145,17 @@ function changeColorScheme(){
 // function that looks at current outline color and decides if we should
 // hide the outline by setting stroke to light grey
 // or if we should display the outline  by setting the stroke color to none
+let toggled = false;
 function toggleOutlines(){
-    let newStroke;
-    if(svg.selectAll("path").attr("stroke") != "none"){
-        newStroke = "none";
-    }
-    else{
-        newStroke = function(d) {return (d.id != undefined && d.id.toString()[0] == "3" && d.id.toString()[1] == "2") ? color(rateById.get(d.id)) : "#D3D3D3"; }
-    }
-    svg.selectAll("path").attr("stroke", newStroke);
+    svg.selectAll("path")
+        .attr("stroke", function(d){
+            if(verifyNevada(d)){
+                return toggled ? color(rateById.get(d.id)) : "black";
+            }
+        })
+    toggled = toggled ? false : true;
+}
+
+function verifyNevada(d){
+    return (d.id != undefined && d.id.toString()[0] == "3" && d.id.toString()[1] == "2") ? true : false;
 }
